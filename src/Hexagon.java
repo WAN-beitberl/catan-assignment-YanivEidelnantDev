@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Stroke;
 
-public class Hexagon extends Polygon { //FOLLOWING TUTORIAL
+public class Hexagon extends Polygon {
 
     private static final long serialVersionUID = 1L;
 

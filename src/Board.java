@@ -22,6 +22,8 @@ public class Board extends JPanel {
     private Font font = new Font("Arial", Font.BOLD, 24);
     FontMetrics metrics;
 
+    GUI gui = new GUI();
+
     public Board() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
     }
@@ -34,9 +36,12 @@ public class Board extends JPanel {
         g2d.setFont(font);
         metrics = g.getFontMetrics();
 
-        drawCircle(g2d, W2, H2, 660, true, true, 0x4488FF, 0);
+        drawCircle(g2d, W2, H2, 590, true, true, 0x4488FF, 0);
 
         drawHexGridAdvanced(g2d, 5, 60);
+
+        g2d.setStroke(new BasicStroke(3));
+        gui.DrawGUI(g);
     }
 
     private void drawHexGridAdvanced(Graphics g, int n, int r) {
@@ -63,7 +68,7 @@ public class Board extends JPanel {
     }
 
     private void drawHex(Graphics g, int posX, int posY, int x, int y, int r) {
-        Hexagon hex = new Hexagon(x, y, r);
+        Hexagon hex = new Hexagon(x, y-100, r);
         String text = String.format("%s : %s", coord(posX), coord(posY));
         int w = metrics.stringWidth(text);
         int h = metrics.getHeight();
@@ -72,8 +77,6 @@ public class Board extends JPanel {
         g.fillPolygon(hex);
         g.setColor(new Color(0xFFDD88)); //border
         g.drawPolygon(hex);
-        g.setColor(new Color(0xFFFFFF));
-        g.drawString(text, x - w/2, y + h/2);
     }
 
     private String coord(int value) {
@@ -95,8 +98,8 @@ public class Board extends JPanel {
         g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND));
 
-        int x2 = centered ? x - (width / 2) : x;
-        int y2 = centered ? y - (height / 2) : y;
+        int x2 = x - (width / 2);
+        int y2 = y - (height / 2) - 100;
 
         if (filled)
             g.fillOval(x2, y2, width, height);

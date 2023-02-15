@@ -12,20 +12,13 @@ import javax.swing.JPanel;
 public class Window extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private final int WIDTH = 1200;
-    private final int HEIGHT = 800;
-
-    private final int W2 = WIDTH / 2;
-    private final int H2 = HEIGHT / 2;
+    private final int W2 = 1200 / 2;
+    private final int H2 = 800 / 2;
 
     private Font font = new Font("Arial", Font.BOLD, 24);
     FontMetrics metrics;
 
     GUI gui = new GUI();
-
-    public Window() {
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
-    }
 
     @Override
     public void paintComponent(Graphics g) {

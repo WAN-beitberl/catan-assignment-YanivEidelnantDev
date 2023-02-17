@@ -117,12 +117,14 @@ public class Window extends JPanel {
                     break;
             }
         }
-        //tilecolor = new Color(0xFFFFFF);
 
-        g.setColor(tilecolor); //fill
+
+        g.setColor(tilecolor); //fill color
         g.fillPolygon(hex);
         g.setColor(new Color(0xFFDD88)); //border
         g.drawPolygon(hex);
+        drawCircle((Graphics2D)g, x, y, 40, true, true, 0xfbe0c5, 0);
+
     }
 
     public void drawCircle(Graphics2D g, int x, int y, int diameter,

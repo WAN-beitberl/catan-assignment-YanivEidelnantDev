@@ -19,6 +19,7 @@ public class Window extends JPanel {
     private int[] CountTile = new int[5];
     // 0 = Forest | 1 = Pasture | 2 = Field | 3 = Hill | 4 = Mountain
 
+    FontMetrics metrics;
     GUI gui = new GUI();
 
     @Override
@@ -26,7 +27,8 @@ public class Window extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-        g2d.setFont(new Font("Arial", Font.BOLD, 24));
+        g2d.setFont(new Font("Serif", Font.BOLD, 24));
+        metrics = g.getFontMetrics();
 
         Hexagon hex = new Hexagon(W2, H2-100, 325);
         hex.setRotation(0);
@@ -65,7 +67,11 @@ public class Window extends JPanel {
 
     private void drawHex(Graphics g, int posX, int posY, int x, int y, int r) {
         Hexagon hex = new Hexagon(x, y-100, r);
+
         Random random = new Random();
+        int randomnum = random.nextInt(11) + 2;
+        int w = metrics.stringWidth(Integer.toString(randomnum));
+        int h = metrics.getHeight();
         int modifier = 1; // Loop will run until it finds an available color
         Color tilecolor = null;
         while(modifier == 1)
@@ -118,12 +124,13 @@ public class Window extends JPanel {
             }
         }
 
-
         g.setColor(tilecolor); //fill color
         g.fillPolygon(hex);
         g.setColor(new Color(0xFFDD88)); //border
         g.drawPolygon(hex);
         drawCircle((Graphics2D)g, x, y, 40, true, true, 0xfbe0c5, 0);
+        g.setColor(new Color(0x000000));
+        g.drawString(Integer.toString(randomnum), x - w/2, y + h/2 - 107);
 
     }
 

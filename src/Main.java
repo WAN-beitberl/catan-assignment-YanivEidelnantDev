@@ -2,6 +2,7 @@ import javax.sound.sampled.Line;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,13 +32,14 @@ public class Main {
 
         JButton playButton = new JButton("PLAY", new ImageIcon("playicon.png"));
         playButton.setFont(new Font("Tahoma", Font.BOLD, 50));
-        playButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+        playButton.setMargin(new Insets(10,10,10,10));
+        playButton.setIconTextGap(13);
         playButton.setFocusPainted(false);
         playButton.setForeground(new Color(0xFFFFFF));
         playButton.setBackground(Color.RED);
 
-        gbc.gridx= 0;
-        gbc.gridy= 0;
+
+
         label.add(playButton, gbc);
         playButton.addActionListener(e -> {
             f.remove(label);

@@ -29,11 +29,11 @@ public class Main {
         label.setLayout(new GridBagLayout());
         GridBagConstraints gbc =  new GridBagConstraints();
 
-        JButton playButton = new JButton("PLAY");
-        playButton.setFont(new Font("Gill Sans MT", Font.BOLD, 50));
+        JButton playButton = new JButton("PLAY", new ImageIcon("playicon.png"));
+        playButton.setFont(new Font("Tahoma", Font.BOLD, 50));
         playButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         playButton.setFocusPainted(false);
-        playButton.setForeground(new Color(0xDE9857));
+        playButton.setForeground(new Color(0xFFFFFF));
         playButton.setBackground(Color.RED);
 
         gbc.gridx= 0;

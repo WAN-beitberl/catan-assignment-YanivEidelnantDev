@@ -6,17 +6,18 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.util.ArrayList;
+
+import java.util.Random;
 
 import javax.swing.JPanel;
 
 public class Window extends JPanel {
-
-    private static final long serialVersionUID = 1L;
     private final int W2 = 1200 / 2;
     private final int H2 = 800 / 2;
 
-    private Font font = new Font("Arial", Font.BOLD, 24);
-    FontMetrics metrics;
+    private int[] CountTile = new int[5];
+    // 0 = Forest | 1 = Pasture | 2 = Field | 3 = Hill | 4 = Mountain
 
     GUI gui = new GUI();
 
@@ -25,10 +26,12 @@ public class Window extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-        g2d.setFont(font);
-        metrics = g.getFontMetrics();
+        g2d.setFont(new Font("Arial", Font.BOLD, 24));
 
-        drawCircle(g2d, W2, H2, 585, true, true, 0x4488FF, 0);
+        Hexagon hex = new Hexagon(W2, H2-100, 325);
+        hex.setRotation(0);
+        g.setColor(new Color(0x4488FF)); //fill
+        g.fillPolygon(hex);
 
         drawHexGridAdvanced(g2d, 5, 55);
 
@@ -62,7 +65,61 @@ public class Window extends JPanel {
 
     private void drawHex(Graphics g, int posX, int posY, int x, int y, int r) {
         Hexagon hex = new Hexagon(x, y-100, r);
-        g.setColor(new Color(0x008844)); //fill
+        Random random = new Random();
+        int modifier = 1; // Loop will run until it finds an available color
+        Color tilecolor = null;
+        while(modifier == 1)
+        {
+            int randomtile = random.nextInt(5); // Generate tile randomly
+            switch(randomtile)
+            {
+                case 0: // Forest
+                    if(CountTile[randomtile] < 4)
+                    {
+                        modifier = 0;
+                        CountTile[randomtile]++;
+                        tilecolor = new Color(0x0F542E);
+                        break;
+                    }
+                case 1: // Pasture
+                    if(CountTile[randomtile] < 4)
+                    {
+                        modifier = 0;
+                        CountTile[randomtile]++;
+                        tilecolor = new Color(0x23C016);
+                        break;
+                    }
+                case 2: // Field
+                    if(CountTile[randomtile] < 4)
+                    {
+                        modifier = 0;
+                        CountTile[randomtile]++;
+                        tilecolor = new Color(0xD2B34E);
+                        break;
+                    }
+                case 3: // Hill
+                    if(CountTile[randomtile] < 3)
+                    {
+                        modifier = 0;
+                        CountTile[randomtile]++;
+                        tilecolor = new Color(0xE55E15);
+                        break;
+                    }
+                case 4: // Mountain
+                    if(CountTile[randomtile] < 4)
+                    {
+                        modifier = 0;
+                        CountTile[randomtile]++;
+                        tilecolor = new Color(0x747C78);
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+        //tilecolor = new Color(0xFFFFFF);
+
+        g.setColor(tilecolor); //fill
         g.fillPolygon(hex);
         g.setColor(new Color(0xFFDD88)); //border
         g.drawPolygon(hex);

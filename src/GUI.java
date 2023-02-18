@@ -25,7 +25,6 @@ public class GUI extends JPanel {
         g.setColor(Color.BLACK);
         g.drawRect(948,398, 250, 400);
 
-
         // Drawing Button Area
         g.setColor(Color.GRAY);
         g.fillRect(250,600, 700, 200);

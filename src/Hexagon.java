@@ -61,11 +61,11 @@ public class Hexagon extends Polygon {
         setCenter(new Point(x, y));
     }
 
-    private double findAngle(double fraction) {
+    protected double findAngle(double fraction) {
         return fraction * Math.PI * 2 + Math.toRadians((rotation + 180) % 360);
     }
 
-    private Point findPoint(double angle) {
+    protected Point findPoint(double angle) {
         int x = (int) (center.x + Math.cos(angle) * radius);
         int y = (int) (center.y + Math.sin(angle) * radius);
 
@@ -83,21 +83,4 @@ public class Hexagon extends Polygon {
         }
     }
 
-    public void drawPolygon(Graphics2D g, int x, int y, int lineThickness, int colorValue, boolean filled) {
-        // Store before changing.
-        Stroke tmpS = g.getStroke();
-        Color tmpC = g.getColor();
-
-        g.setColor(new Color(colorValue));
-        g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-
-        if (filled)
-            g.fillPolygon(xpoints, ypoints, npoints);
-        else
-            g.drawPolygon(xpoints, ypoints, npoints);
-
-        // Set values to previous when done.
-        g.setColor(tmpC);
-        g.setStroke(tmpS);
-    }
 }

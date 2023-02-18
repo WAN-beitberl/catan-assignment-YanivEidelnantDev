@@ -38,8 +38,6 @@ public class Main {
         playButton.setForeground(new Color(0xFFFFFF));
         playButton.setBackground(Color.RED);
 
-
-
         label.add(playButton, gbc);
         playButton.addActionListener(e -> {
             f.remove(label);

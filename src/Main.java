@@ -5,14 +5,13 @@ public class Main {
     public static void main(String[] args) {
 
         JFrame f = new JFrame();
-        Window w = new Window();
+        Board b = new Board();
 
-        f.setContentPane(w);
+        f.setContentPane(b);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.pack();
         f.setLocationRelativeTo(null);
         f.setVisible(true);
-        f.setResizable(false);
 
     }
 

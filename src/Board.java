@@ -7,9 +7,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Window extends JPanel {
+public class Board extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private final int WIDTH = 1200;
@@ -23,7 +24,7 @@ public class Window extends JPanel {
 
     GUI gui = new GUI();
 
-    public Window() {
+    public Board() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
     }
 
@@ -35,12 +36,11 @@ public class Window extends JPanel {
         g2d.setFont(font);
         metrics = g.getFontMetrics();
 
-        drawCircle(g2d, W2, H2, 585, true, true, 0x4488FF, 0);
+        drawCircle(g2d, W2, H2, 590, true, true, 0x4488FF, 0);
 
-        drawHexGridAdvanced(g2d, 5, 55);
+        drawHexGridAdvanced(g2d, 5, 60);
 
         g2d.setStroke(new BasicStroke(3));
-
         gui.DrawGUI(g);
     }
 
@@ -69,10 +69,18 @@ public class Window extends JPanel {
 
     private void drawHex(Graphics g, int posX, int posY, int x, int y, int r) {
         Hexagon hex = new Hexagon(x, y-100, r);
+        String text = String.format("%s : %s", coord(posX), coord(posY));
+        int w = metrics.stringWidth(text);
+        int h = metrics.getHeight();
+
         g.setColor(new Color(0x008844)); //fill
         g.fillPolygon(hex);
         g.setColor(new Color(0xFFDD88)); //border
         g.drawPolygon(hex);
+    }
+
+    private String coord(int value) {
+        return (value > 0 ? "+" : "") + Integer.toString(value);
     }
 
     public void drawCircle(Graphics2D g, int x, int y, int diameter,

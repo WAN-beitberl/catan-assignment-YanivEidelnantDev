@@ -12,7 +12,7 @@ public class Hexagon extends Polygon {
     public static final int SIDES = 6;
 
     private Point[] points = new Point[SIDES];
-    private Point center = new Point(0, 0);
+    private Point center;
     private int radius;
     private int rotation = 90;
 
@@ -33,6 +33,10 @@ public class Hexagon extends Polygon {
 
     public int getRadius() {
         return radius;
+    }
+
+    public Point getCenter() {
+        return center;
     }
 
     public void setRadius(int radius) {
@@ -79,7 +83,7 @@ public class Hexagon extends Polygon {
             xpoints[p] = point.x;
             ypoints[p] = point.y;
             points[p] = point;
-            System.out.printf("%d. (%d, %d)\n", p, point.x, point.y);
+            //System.out.printf("%d. (%d, %d)\n", p, point.x, point.y);
         }
     }
 

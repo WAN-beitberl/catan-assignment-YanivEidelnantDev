@@ -1,21 +1,40 @@
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.security.PublicKey;
 import java.util.ArrayList;
 
+import java.util.HashMap;
 import java.util.Random;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class Window extends JPanel {
     private final int W2 = 1200 / 2;
     private final int H2 = 800 / 2;
 
+    private ArrayList<Hexagon> HexArr= new ArrayList<Hexagon>(19);
+
+    private ArrayList<Point> PointArr = new ArrayList<Point>();
+
+
+
+    FontMetrics metrics;
+    GUI gui = new GUI();
+
+    JFrame f;
+
     private int[] CountTile = new int[5];
     // 0 = Forest | 1 = Pasture | 2 = Field | 3 = Mountain | 4 = Hill
 
-    private int[] CountNum = {1, 2, 2, 2, 2, 1, 2, 2, 2, 2 ,1};
+    private int[] CountNum = {1, 2, 2, 2, 2, 0, 2, 2, 2, 2 ,2};
     // 2-12 allowed numbers
-    FontMetrics metrics;
-    GUI gui = new GUI();
+
+
+    public Window(JFrame frame)
+    {
+        f = frame;
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -26,22 +45,21 @@ public class Window extends JPanel {
         metrics = g.getFontMetrics();
 
         Hexagon hex = new Hexagon(W2, H2-100, 325);
-
-
         hex.setRotation(0);
-        System.out.println("");
+        //System.out.println("");
         g.setColor(new Color(0x4488FF)); //fill
         g.fillPolygon(hex);
 
-
-        drawHexGridAdvanced(g2d, 5, 55);
+        drawHexGrid(g2d, 5, 55);
 
         g2d.setStroke(new BasicStroke(3));
 
         gui.DrawGUI(g);
+
+        drawRoads(g2d);
     }
 
-    private void drawHexGridAdvanced(Graphics g, int n, int r) {
+    private void drawHexGrid(Graphics g, int n, int r) {
         double ang30 = Math.toRadians(30);
         double xOff = Math.cos(ang30) * r;
         double yOff = Math.sin(ang30) * r;
@@ -62,6 +80,8 @@ public class Window extends JPanel {
                 drawHex(g, (int) (W2 + xOff * (-cols + (col * 2 + 1))), (int) (H2 + yOff * (n - cols) * 3), r);
             }
         }
+
+        drawCities(f);
     }
 
     private void drawHex(Graphics g, int x, int y, int r) {
@@ -140,15 +160,83 @@ public class Window extends JPanel {
         drawCircle((Graphics2D)g, x, y, 40, true, true, 0xfbe0c5, 0);
         g.setColor(new Color(0x000000));
         g.drawString(Integer.toString(randomnum), x - w/2, y + h/2 - 107);
+        HexArr.add(hex);
+    }
+    private void drawCities(JFrame f)
+    {
+        for(int i = 0; i < 19; i++)
+        {
+            Hexagon hex = HexArr.get(i);
+            for (int p = 0; p < 6; p++) {
+                double angle = hex.findAngle((double) p / 6);
+                Point point = hex.findPoint(angle);
+                Point point2 = new Point();
 
-        //testing intersections
-//        for (int p = 0; p < 6; p++) {
-//            double angle = hex.findAngle((double) p / 6);
-//            Point point = hex.findPoint(angle);
-//            g.setColor(Color.BLACK);
-//            g.fillRect(point.x-6,point.y-6, 20, 20);
-//        }
+                //Finding point can have error margin of a pixel so this is a fix
+                //Goes in a range of 1 pixel around the found point and checks if exists
+                int XMod[] = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+                int YMod[] = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+                int Modifier = 1;
+                for (int j = 0; j < 9; j++)
+                {
+                    point2.x = point.x-XMod[j];
+                    point2.y = point.y-YMod[j];
+                    if(PointArr.contains(point2)){
+                        Modifier = 0;
+                        break;
+                    }
+                }
+                if(Modifier == 1) {
+                    drawCityButton(f, point.x-8, point.y-8, 20, 20);
+                    PointArr.add(point);
+                }
+            }
+        }
+    }
 
+    private void drawCityButton(JFrame f, int x, int y, int width, int height)
+    {
+        JButton cityButton = new JButton("");
+        cityButton.setFocusPainted(false);
+        cityButton.setBorderPainted(false);
+        cityButton.setRolloverEnabled(false);
+        cityButton.setBackground(new Color(0,0,0,0));
+        cityButton.setBounds(x, y, width, height);
+        f.add(cityButton);
+
+        cityButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent me){
+                if(cityButton.isEnabled())
+                {
+                    cityButton.setBackground(Color.WHITE);
+                }
+            }
+            public void mouseExited(MouseEvent me){
+                if(cityButton.isEnabled())
+                {
+                    cityButton.setBackground(new Color(0,0,0,0));
+                }
+            }
+            public void mousePressed(MouseEvent me){
+                cityButton.setBackground(Color.BLUE);
+                cityButton.setEnabled(false);
+            }
+        });
+
+    }
+
+    private void drawRoads(Graphics2D g)
+    {
+//        Road road = new Road(PointArr.get(0).x, PointArr.get(0).y, PointArr.get(1).x, PointArr.get(1).y);
+//        road.drawRoad(g);
+        Road road2 = new Road(PointArr.get(1).x, PointArr.get(1).y, PointArr.get(2).x, PointArr.get(2).y);
+        road2.drawRoad(g);
+//        Road road3 = new Road(PointArr.get(2).x, PointArr.get(2).y, PointArr.get(3).x, PointArr.get(3).y);
+//        road3.drawRoad(g);
+//        Road road4 = new Road(PointArr.get(3).x, PointArr.get(3).y, PointArr.get(4).x, PointArr.get(4).y);
+//        road4.drawRoad(g);
+//        Road road5 = new Road(PointArr.get(4).x, PointArr.get(4).y, PointArr.get(5).x, PointArr.get(5).y);
+//        road5.drawRoad(g);
 
     }
 
@@ -179,5 +267,7 @@ public class Window extends JPanel {
         g.setColor(tmpC);
         g.setStroke(tmpS);
     }
+
+
 
 }

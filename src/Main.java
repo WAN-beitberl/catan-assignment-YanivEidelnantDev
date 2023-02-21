@@ -5,9 +5,14 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class Main {
+    JFrame f = new JFrame("קטאן קטן");
     public static void main(String[] args) {
+        Main main = new Main();
+        main.start();
 
-        JFrame f = new JFrame("קטאן קטן");
+    }
+
+    public void start() {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setLocationRelativeTo(null);
         f.setResizable(false);
@@ -15,13 +20,13 @@ public class Main {
 
         drawTitleScreen(f);
 
+
         f.pack();
         f.setVisible(true);
-
     }
 
     // Method to draw the title screen
-    public static void drawTitleScreen(JFrame f) {
+    public void drawTitleScreen(JFrame f) {
         JPanel titlePanel = new JPanel(new BorderLayout());
         ImageIcon icon = new ImageIcon("catankatan.png");
         JLabel label = new JLabel(icon);
@@ -41,13 +46,15 @@ public class Main {
         label.add(playButton, gbc);
         playButton.addActionListener(e -> {
             f.remove(label);
-            Window w = new Window();
+            Window w = new Window(f);
             f.setContentPane(w);
             f.revalidate();
             f.repaint();
+
         });
 
 
         f.setContentPane(titlePanel);
     }
+
 }

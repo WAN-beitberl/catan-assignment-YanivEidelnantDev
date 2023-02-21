@@ -1,9 +1,10 @@
 import java.awt.*;
+import java.security.PublicKey;
 import java.util.ArrayList;
 
 import java.util.Random;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class Window extends JPanel {
     private final int W2 = 1200 / 2;
@@ -12,10 +13,21 @@ public class Window extends JPanel {
     private int[] CountTile = new int[5];
     // 0 = Forest | 1 = Pasture | 2 = Field | 3 = Mountain | 4 = Hill
 
-    private int[] CountNum = {1, 2, 2, 2, 2, 1, 2, 2, 2, 2 ,1};
+    private int[] CountNum = {1, 2, 2, 2, 2, 0, 2, 2, 2, 2 ,2};
     // 2-12 allowed numbers
+    private ArrayList<Hexagon> HexArr= new ArrayList<Hexagon>(19);
+
+    private ArrayList<Point> PointArr = new ArrayList<Point>();
+
     FontMetrics metrics;
     GUI gui = new GUI();
+
+    JFrame f;
+
+    public Window(JFrame frame)
+    {
+        f = frame;
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -26,13 +38,10 @@ public class Window extends JPanel {
         metrics = g.getFontMetrics();
 
         Hexagon hex = new Hexagon(W2, H2-100, 325);
-
-
         hex.setRotation(0);
-        System.out.println("");
+        //System.out.println("");
         g.setColor(new Color(0x4488FF)); //fill
         g.fillPolygon(hex);
-
 
         drawHexGridAdvanced(g2d, 5, 55);
 
@@ -62,6 +71,8 @@ public class Window extends JPanel {
                 drawHex(g, (int) (W2 + xOff * (-cols + (col * 2 + 1))), (int) (H2 + yOff * (n - cols) * 3), r);
             }
         }
+
+        drawCities(f);
     }
 
     private void drawHex(Graphics g, int x, int y, int r) {
@@ -140,14 +151,52 @@ public class Window extends JPanel {
         drawCircle((Graphics2D)g, x, y, 40, true, true, 0xfbe0c5, 0);
         g.setColor(new Color(0x000000));
         g.drawString(Integer.toString(randomnum), x - w/2, y + h/2 - 107);
+        HexArr.add(hex);
+    }
+    public void drawCities(JFrame f)
+    {
+        for(int i = 0; i < 19; i++)
+        {
+            Hexagon hex = HexArr.get(i);
+            for (int p = 0; p < 6; p++) {
+                double angle = hex.findAngle((double) p / 6);
+                Point point = hex.findPoint(angle);
+                Point point2 = new Point();
 
-        //testing intersections
-//        for (int p = 0; p < 6; p++) {
-//            double angle = hex.findAngle((double) p / 6);
-//            Point point = hex.findPoint(angle);
-//            g.setColor(Color.BLACK);
-//            g.fillRect(point.x-6,point.y-6, 20, 20);
-//        }
+                //Finding point can have error margin of a pixel so this is a fix
+                //Goes in a range of 1 pixel around the found point and checks if exists
+                int XMod[] = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+                int YMod[] = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+                int Modifier = 1;
+                for (int j = 0; j < 9; j++)
+                {
+                    point2.x = point.x-XMod[j];
+                    point2.y = point.y-YMod[j];
+                    if(PointArr.contains(point2)){
+                        Modifier = 0;
+                        break;
+                    }
+                }
+                if(Modifier == 1) {
+                    drawCityButton(f, point.x-8, point.y-8, 20, 20);
+                    PointArr.add(point);
+                }
+            }
+        }
+    }
+
+    public void drawCityButton(JFrame f, int x, int y, int width, int height)
+    {
+        JButton cityButton = new JButton("");
+        cityButton.setFocusPainted(false);
+        cityButton.setBorderPainted(false);
+        cityButton.setBackground(Color.BLUE);
+        cityButton.setBounds(x, y, width, height);
+        f.add(cityButton);
+        cityButton.addActionListener(e -> {
+            cityButton.setBackground(Color.BLACK);
+        });
+
 
 
     }
@@ -179,5 +228,7 @@ public class Window extends JPanel {
         g.setColor(tmpC);
         g.setStroke(tmpS);
     }
+
+
 
 }
